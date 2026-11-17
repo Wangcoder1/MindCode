@@ -1,0 +1,149 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* prev;
+    struct Node* next;
+} Node;
+
+// 1. 创建链表
+void CreateList(Node** head, int arr[], int len) {
+    // 尾插法创建双向链表
+    *head = (Node*)malloc(sizeof(Node));
+    if(*head == NULL){
+        return;
+    }
+    (*head)->prev = NULL;
+    (*head)->next = NULL;
+    
+    Node* p = *head;
+    for(int i = 0; i < len; i++){
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        if(newNode == NULL){
+            return;
+        }
+        
+        newNode->data = arr[i];
+        newNode->prev = p;
+        newNode->next = NULL;
+        p->next = newNode;
+        p = newNode;
+    }
+}
+
+// 2. 正向打印
+void PrintForward(Node* head) {
+    Node* p = head->next;
+    while(p != NULL){
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("\n");
+}
+
+// 3. 反向打印
+void PrintBackward(Node* head) {
+    if(head == NULL) return;
+    //先找尾节点
+    Node* p = head->next;
+      if(p == NULL){
+        printf("\n");
+        return;
+    }
+    while(p->next != NULL){
+        p = p->next;
+    }
+    Node* tail = p;
+    
+    while(tail != head){
+        printf("%d ", tail->data);
+        tail = tail->prev;
+    }
+    printf("\n");
+}
+
+// 4. 在 target 后面插入 value
+void InsertAfter(Node* head, int target, int value) {
+    Node* p = head->next;
+    while(p != NULL && p->data != target){
+        p = p->next;
+    }
+    if(p ==NULL){
+        return;
+    }
+    
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL){
+        return;
+    }
+    
+    newNode->data = value;
+    newNode->prev = p;
+    if(p->next != NULL){
+        p->next->prev = newNode;
+        newNode->next = p->next;
+    }
+    p->next = newNode;
+}
+
+// 5. 删除值为 target 的节点
+void DeleteNode(Node* head, int target) {
+    Node* p = head->next;
+    while(p != NULL && p->data != target){
+        p = p->next;
+    }
+    //没找到
+    if(p == NULL){
+        return;
+    }
+    //让前一个节点跳过p
+    p->prev->next = p->next;
+    //如果有后一个节点，修改prev
+    if(p->next != NULL){
+        p->next->prev = p->prev;
+    }
+    
+    free(p);
+}
+
+// 6. 释放链表
+void FreeList(Node* head) {
+    Node* p = head;
+    while(p != NULL){
+        Node* temp = p;
+        p = p->next;
+        free(temp);
+    }
+}
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    Node* head = NULL;
+
+    CreateList(&head, arr, n);
+
+    printf("初始链表：\n");
+    PrintForward(head);
+    PrintBackward(head);
+
+    InsertAfter(head, 20, 25);
+
+    printf("\n插入25后：\n");
+    PrintForward(head);
+    PrintBackward(head);
+
+    DeleteNode(head, 40);
+
+    printf("\n删除40后：\n");
+    PrintForward(head);
+    PrintBackward(head);
+
+    FreeList(head);
+
+    printf("\n链表释放成功！\n");
+
+    return 0;
+}
