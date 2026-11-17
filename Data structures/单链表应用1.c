@@ -1,9 +1,9 @@
-/*[2015]£¨15·Ö£©ÓÃµ¥Á´±í±£´æ n ¸öÕûÊı£¬½áµãµÄ½á¹¹Îª [data][link]£¬ÇÒ|data|¡Ün(n ÎªÕıÕûÊı)¡£
-ÏÖÒªÇóÉè¼ÆÒ»¸öÊ±¼ä¸´ÔÓ¶È¾¡¿ÉÄÜ¸ßĞ§µÄËã·¨£¬¶ÔÓÚÁ´±íÖĞ data µÄ¾ø¶ÔÖµÏàµÈµÄ½Úµã£¬
-½ö±£ÁôµÚÒ»´Î³öÏÖµÄ½Úµã¶øÉ¾³ıÆäÓà¾ø¶ÔÖµÏàµÈµÄ½Úµã¡£ÀıÈç£¬Èô¸ø¶¨µ¥Á´±í head ÈçÏÂ£º
-head ¡õ¡ú21¡ú-15¡ú-15¡ú-7¡ú15
-ÔòÉ¾³ı½ÚµãºóµÄ head Îª
-head ¡õ¡ú21¡ú-15¡ú-7
+/*[2015]ï¼ˆ15åˆ†ï¼‰ç”¨å•é“¾è¡¨ä¿å­˜ n ä¸ªæ•´æ•°ï¼Œç»“ç‚¹çš„ç»“æ„ä¸º [data][link]ï¼Œä¸”|data|â‰¤n(n ä¸ºæ­£æ•´æ•°)ã€‚
+ç°è¦æ±‚è®¾è®¡ä¸€ä¸ªæ—¶é—´å¤æ‚åº¦å°½å¯èƒ½é«˜æ•ˆçš„ç®—æ³•ï¼Œå¯¹äºé“¾è¡¨ä¸­ data çš„ç»å¯¹å€¼ç›¸ç­‰çš„èŠ‚ç‚¹ï¼Œ
+ä»…ä¿ç•™ç¬¬ä¸€æ¬¡å‡ºç°çš„èŠ‚ç‚¹è€Œåˆ é™¤å…¶ä½™ç»å¯¹å€¼ç›¸ç­‰çš„èŠ‚ç‚¹ã€‚ä¾‹å¦‚ï¼Œè‹¥ç»™å®šå•é“¾è¡¨ head å¦‚ä¸‹ï¼š
+head â–¡â†’21â†’-15â†’-15â†’-7â†’15
+åˆ™åˆ é™¤èŠ‚ç‚¹åçš„ head ä¸º
+head â–¡â†’21â†’-15â†’-7
 */
 
 #include<stdio.h>
@@ -14,7 +14,7 @@ typedef struct Node {
 	struct Node* link;
 }Node;
 
-//Î²²å·¨´´½¨Á´±í
+//å°¾æ’æ³•åˆ›å»ºé“¾è¡¨
 void CreateList(Node** head, int arr[], int len) {
 	*head = (Node*)malloc(sizeof(Node));
 	(*head)->link = NULL;
@@ -28,7 +28,7 @@ void CreateList(Node** head, int arr[], int len) {
 	}
 }
 
-//´òÓ¡Á´±í
+//æ‰“å°é“¾è¡¨
 void Print(Node* head) {
 	Node* p = head->link;
 	while (p != NULL) {
@@ -38,11 +38,11 @@ void Print(Node* head) {
 	printf("\n");
 }
 
-//É¾³ı¾ø¶ÔÖµÖØ¸´½áµã
+//åˆ é™¤ç»å¯¹å€¼é‡å¤ç»“ç‚¹
 void DelSameAbs(Node* head, int n) {
 	int* flag = (int*)calloc(n + 1, sizeof(int));
-	Node* p = head->link;                     //pÖ¸Ïòµ±Ç°±éÀúµÄµÚÒ»¸ö½áµã
-	Node* pre = head;                         //preÊÇpµÄÇ°Çı½áµã
+	Node* p = head->link;                     //pæŒ‡å‘å½“å‰éå†çš„ç¬¬ä¸€ä¸ªç»“ç‚¹
+	Node* pre = head;                         //preæ˜¯pçš„å‰é©±ç»“ç‚¹
 
 	while (p != NULL) {
 		int val = abs(p->data);
@@ -52,26 +52,26 @@ void DelSameAbs(Node* head, int n) {
 			p = pre->link;
 		}
 		else {
-			//µÚÒ»´Î³öÏÖ£¬´òÉÏ±ê¼Ç£¬preºÍpºóÒÆ
+			//ç¬¬ä¸€æ¬¡å‡ºç°ï¼Œæ‰“ä¸Šæ ‡è®°ï¼Œpreå’Œpåç§»
 			flag[val] = 1;
 			pre = p;
 			p = p->link;
 		}
 	}
-	free(flag);                                  // ÊÍ·Å±ê¼ÇÊı×é
+	free(flag);                                  // é‡Šæ”¾æ ‡è®°æ•°ç»„
 }
 
 int main() {
 	int arr[] = { 21, -15, -15, -7, 15 };
-	int n = sizeof(arr) / sizeof(arr[0]);    //¼ÆËãn
+	int n = sizeof(arr) / sizeof(arr[0]);    //è®¡ç®—n
 	Node* head;
 
 	CreateList(&head, arr, n);
-	printf("È¥ÖØÇ°£º\n");
+	printf("å»é‡å‰ï¼š\n");
 	Print(head);
 
 	DelSameAbs(head, n);
-	printf("È¥ÖØºó: \n");
+	printf("å»é‡å: \n");
 	Print(head);
 
 	return 0;
