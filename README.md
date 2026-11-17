@@ -1,2 +1,4 @@
-# code-collection
-记录初学者学习/练习的代码
+# MindCode
+    Code
+    Notes&Mindmap
+记录计算机学习笔记代码
