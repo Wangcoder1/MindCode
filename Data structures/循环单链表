@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// 1. 尾插法创建循环单链表
+void CreateList(Node** head, int arr[], int len) {
+    *head = (Node*)malloc(sizeof(Node));
+    if(*head == NULL){
+        return;
+    }
+    
+    (*head)->next = *head;
+    
+    Node* tail = *head;
+    for(int i = 0; i<len; i++){
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        if(newNode == NULL){
+            return;
+        }
+        
+        newNode->data = arr[i];
+        tail->next = newNode;
+        newNode->next = *head;
+        tail = newNode;
+    }
+}
+
+// 2. 打印循环链表
+void PrintList(Node* head) {
+    Node* p = head->next;
+    while(p != head){
+        printf("%d ", p->data);
+        p = p->next;
+    }
+}
+
+// 3. 在指定值后插入节点
+void InsertAfter(Node* head, int target, int value) {
+    Node* p = head->next;
+    while(p->next != head && p->data != target){
+        p = p->next;
+    }
+    if(p == head){
+        return;         //没找到
+    }
+    
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL){
+        return;
+    }
+    newNode->data = value;
+    newNode->next = p->next;
+    p->next = newNode;
+}
+
+// 4. 删除指定值的节点
+void DeleteNode(Node* head, int target) {
+    Node* pre = head;
+    Node* cur = head->next;
+    while(cur != head && cur->data != target){
+        pre = cur;
+        cur = cur->next;
+    }
+    if(cur == head){
+        return;              //没找到
+    }
+    
+    pre->next = cur->next;
+    free(cur);
+}
+
+// 5. 查找节点
+Node* Search(Node* head, int target) {
+    Node* p = head->next;
+    while(p != head && p->data != target){
+        p = p->next;
+    }
+    if(p == head){
+        return;
+    }
+    return p;
+}
+
+// 6. 释放循环链表
+void FreeList(Node* head) {
+    Node* p = head->next;
+    while(p != head){
+        Node* temp = p;
+        p = p->next;
+        free(temp);
+    }
+    free(head);
+}
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    Node* head = NULL;
+
+    CreateList(&head, arr, n);
+
+    if (head == NULL) {
+        printf("创建失败！\n");
+        return 1;
+    }
+
+    printf("初始链表：\n");
+    PrintList(head);
+
+    InsertAfter(head, 20, 25);
+    printf("\n插入25后：\n");
+    PrintList(head);
+
+    DeleteNode(head, 40);
+    printf("\n删除40后：\n");
+    PrintList(head);
+
+    Node* p = Search(head, 30);
+
+    printf("\n查找30：\n");
+
+    if (p != NULL) {
+        printf("找到节点%d\n", p->data);
+    } else {
+        printf("没有找到\n");
+    }
+
+    FreeList(head);
+
+    printf("\n释放链表成功！\n");
+
+    return 0;
+}
