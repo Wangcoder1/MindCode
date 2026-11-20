@@ -41,7 +41,7 @@ void PrintList(Node* head) {
 // 3. 在指定值后插入节点
 void InsertAfter(Node* head, int target, int value) {
     Node* p = head->next;
-    while(p->next != head && p->data != target){
+    while(p != head && p->data != target){
         p = p->next;
     }
     if(p == head){
@@ -80,7 +80,7 @@ Node* Search(Node* head, int target) {
         p = p->next;
     }
     if(p == head){
-        return;
+        return NULL; //没找到
     }
     return p;
 }
