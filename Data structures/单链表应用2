@@ -1,6 +1,6 @@
-/*[2019]��13�֣������Ա�L=(a?,a?,a?,?,a???,a???,a?)���ô�ͷ�ڵ�ĵ��������棬
-�����һ���ռ临�Ӷ�ΪO(1)��ʱ���Ͼ����ܸ�Ч���㷨����������L�еĸ��ڵ㣬
-�õ����Ա�L��=(a?,a?,a?,a???,a?,a???,?)��
+/*[2019]（13分）设线性表L=(a?,a?,a?,?,a???,a???,a?)采用带头节点的单链表保存，
+请设计一个空间复杂度为O(1)且时间上尽可能高效的算法，重新排列L中的各节点，
+得到线性表L’=(a?,a?,a?,a???,a?,a???,?)。
 */
 
 #include<stdio.h>
@@ -11,7 +11,7 @@ typedef struct Node {
 	struct Node* next;
 }Node;
 
-//β�巨����������
+//尾插法创建单链表
 void CreateList(Node** H, int arr[], int n) {
 	*H = (Node*)malloc(sizeof(Node));
 	(*H)->next = NULL;
@@ -25,7 +25,7 @@ void CreateList(Node** H, int arr[], int n) {
 	}
 }
 
-//������ӡ����
+//遍历打印链表
 void PrintList(Node* H) {
 	Node* p = H->next;
 	while (p != NULL) {
@@ -35,27 +35,27 @@ void PrintList(Node* H) {
 	printf("\n");
 }
 
-//��ת����
+//反转链表
 Node* Reverse(Node* head) {
 	Node* pre = NULL;
 	Node* cur = head;
-	Node* nxt;                      //��ʱ��curԭ������һ���ڵ�,��ֹ�����Ҳ�����һ���ڵ�
+	Node* nxt;                      //临时存cur原来的下一个节点,防止改完找不到下一个节点
 	while (cur != NULL) {
 		nxt = cur->next;            
-		cur->next = pre;           //��pre���汣��ĵ�ַ����ֵ����ǰ�ڵ��next ���õ�ǰ�ڵ㷴����ָ��ǰ����
+		cur->next = pre;           //把pre里面保存的地址，赋值给当前节点的next （让当前节点反过来指向前方）
 		pre = cur;
 		cur = nxt;
 	}
 	return pre;
 }
 
-//���� O(1)�ռ�
+//重排 O(1)空间
 void Reorder(Node* H) {
 	if (H->next == NULL || H->next->next == NULL) {
 		return;
 	}
 
-	//����ָ���ҵ��м�ڵ�
+	//快慢指针找到中间节点
 	Node* slow = H;
 	Node* fast = H;
 	while (fast != NULL && fast->next != NULL) {
@@ -63,12 +63,12 @@ void Reorder(Node* H) {
 		fast = fast->next->next;
 	}
 
-	//�Ͽ�ǰ�����ˣ���ת����
+	//断开前后两端，反转后半段
 	Node* back = slow->next;
 	slow->next = NULL;
 	Node* Rback = Reverse(back);
 
-	//����ϲ�
+	//交替合并
 	Node* p = H->next;
 	Node* q = Rback;
 	Node* pNxt, * qNxt;
@@ -84,7 +84,7 @@ void Reorder(Node* H) {
 	}
 }
 
-//�ͷ��ڴ�
+//释放内存
 void FreeList(Node* H) {
 	Node* q, * p = H;
 	while (p != NULL) {
@@ -100,11 +100,11 @@ int main() {
 	Node* H;
 
 	CreateList(&H, arr, n);
-	printf("ԭ������\n");
+	printf("原链表：\n");
 	PrintList(H);
 
 	Reorder(H);
-	printf("���ź�\n");
+	printf("重排后：\n");
 	PrintList(H);
 
 	FreeList(H);
