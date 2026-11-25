@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// 1. 判断栈是否为空
+int IsEmpty(Node* top) {
+    return top == NULL;
+}
+
+// 2. 入栈
+// 成功返回1，失败返回0
+int Push(Node** top, int value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if(newNode == NULL){
+        return 0;
+    }
+    
+    newNode->data = value;
+    newNode->next = *top;
+    *top = newNode;
+    return 1;
+}
+
+// 3. 出栈
+// 成功返回1，失败返回0
+int Pop(Node** top, int* value) {
+    if(*top == NULL){
+        return 0;
+    }
+    
+    Node* temp = *top;;
+    *value = temp->data;
+    *top = temp->next;
+    free(temp);
+    return 1;
+}
+
+// 4. 查看栈顶，不删除元素
+int Peek(Node* top, int* value) {
+    if(top == NULL){
+        return 0;
+    }
+    
+    *value = top->data;
+    return 1;
+}
+
+// 5. 释放整个栈，并把 top 设置为 NULL
+void FreeStack(Node** top) {
+    Node* p = *top;
+    while(p != NULL){
+        Node* temp = p;
+        p = p->next;
+        free(temp);
+    }
+    *top = NULL;
+}
+
+int main(void) {
+    Node* top = NULL;
+    int value;
+
+    Push(&top, 10);
+    Push(&top, 20);
+    Push(&top, 30);
+
+    if (Peek(top, &value)) {
+        printf("当前栈顶：%d\n", value);
+    }
+
+    if (Pop(&top, &value)) {
+        printf("出栈元素：%d\n", value);
+    }
+
+    Push(&top, 40);
+    Push(&top, 50);
+
+    printf("依次出栈：");
+    while (Pop(&top, &value)) {
+        printf("%d ", value);
+    }
+    printf("\n");
+
+    if (IsEmpty(top)) {
+        printf("栈已空\n");
+    }
+
+    FreeStack(&top);
+
+    printf("释放完成！\n");
+
+    return 0;
+}
